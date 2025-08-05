@@ -11,7 +11,7 @@ class FormFieldType extends Model
     /** @use HasFactory<\Database\Factories\FormFieldTypeFactory> */
     use HasFactory;
 
-    protected $fillable = ['label', 'type', 'required', 'options'];
+    protected $fillable = ['event_id','label', 'type', 'required', 'options'];
     
     protected $casts = [
         'options' => 'array'

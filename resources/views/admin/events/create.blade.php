@@ -28,6 +28,7 @@
     </div>
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold mb-8">Create New Event</h1>
 
             <form action="{{ route('events.store') }}" method="POST" id="eventForm">
                 @csrf
@@ -35,24 +36,23 @@
                 {{-- Basic Event Information --}}
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h2 class="text-xl font-semibold mb-4">Event Details</h2>
-
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Title</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Title(*)</label>
                             <input type="text" name="title"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 required>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Date</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Date(*)</label>
                             <input type="datetime-local" name="event_date"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 required>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location(*)</label>
                             <input type="text" name="location"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="mt-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description(*)</label>
                         <textarea name="description" rows="3"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
                     </div>
@@ -116,8 +116,8 @@
                                     <input type="text" name="form_fields[0][options][]" placeholder="Option"
                                         class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
                                 </div>
-                                <button type="button"
-                                    class="add-option text-blue-600 hover:underline text-sm hidden">Add Option</button>
+                                <button type="button" class="add-option text-blue-600 hover:underline text-sm">Add
+                                    Option</button>
                             </div>
 
                             <input type="hidden" name="form_fields[0][id]" value="0">
@@ -128,8 +128,6 @@
                         class="text-white font-medium bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors flex items-center justify-center cursor-pointer">Add
                         Field</button>
                 </div>
-
-
 
                 <div class="custom-button-margin flex justify-end space-x-4">
                     <a href="{{ route('events.index') }}"
@@ -156,43 +154,43 @@
             fieldContainer.setAttribute('data-field-id', fieldId);
 
             fieldContainer.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <div></div>
-                    <button type="button" class="text-red-500 hover:text-red-700" onclick="removeField(this)">Remove</button>
+            <div class="flex justify-between items-center">
+                <div></div>
+                <button type="button" class="text-red-500 hover:text-red-700" onclick="removeField(this)">Remove</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Field Type</label>
+                    <select name="form_fields[${fieldId}][type]" class="w-full border border-gray-300 rounded px-3 py-2 field-type" onchange="updateFieldOptions(this)">
+                        @foreach ($formFieldTypes as $type)
+                            <option value="{{ $type->value }}">{{ ucfirst(str_replace('_', ' ', $type->name)) }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Field Type</label>
-                        <select name="form_fields[${fieldId}][type]" class="w-full border border-gray-300 rounded px-3 py-2 field-type" onchange="updateFieldOptions(this)">
-                            @foreach ($formFieldTypes as $type)
-                                <option value="{{ $type->value }}">{{ ucfirst(str_replace('_', ' ', $type->name)) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Field Label</label>
-                        <input type="text" name="form_fields[${fieldId}][label]" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500" required>
-                    </div>
-                    
-                    <div class="flex items-center">
-                        <label class="flex items-center">
-                            <input type="checkbox" name="form_fields[${fieldId}][required]" value="1" class="mr-2">
-                            Required Field
-                        </label>
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Field Label</label>
+                    <input type="text" name="form_fields[${fieldId}][label]" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500" required>
                 </div>
                 
-                <div class="field-options mt-4" style="display: none;">
-                    <label class="block text-sm font-medium mb-2">Options (one per line)</label>
-                    <div class="option-group flex items-center gap-2">
-                        <input type="text" name="form_fields[${fieldId}][options][]" placeholder="Option" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <button type="button" class="add-option text-blue-600 hover:underline text-sm hidden">Add Option</button>
+                <div class="flex items-center">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="form_fields[${fieldId}][required]" value="1" class="mr-2">
+                        Required Field
+                    </label>
                 </div>
-                
-                <input type="hidden" name="form_fields[${fieldId}][id]" value="${fieldId}">`;
+            </div>
+            
+            <div class="field-options mt-4" style="display: none;">
+                <label class="block text-sm font-medium mb-2">Options</label>
+                <div class="option-group flex items-center gap-2">
+                    <input type="text" name="form_fields[${fieldId}][options][]" placeholder="Option" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <button type="button" class="add-option text-blue-600 hover:underline text-sm">Add Option</button>
+            </div>
+            
+            <input type="hidden" name="form_fields[${fieldId}][id]" value="${fieldId}">`;
 
             document.getElementById('formFields').appendChild(fieldContainer);
         }
@@ -211,43 +209,40 @@
             const fieldContainer = select.closest('.form-field');
             const optionsDiv = fieldContainer.querySelector('.field-options');
             const addOptionBtn = fieldContainer.querySelector('.add-option');
-            const optionGroups = fieldContainer.querySelectorAll('.option-group');
 
             // Clear existing options if the new type doesn't require them
             if (!['select', 'radio', 'checkbox'].includes(select.value)) {
                 optionsDiv.innerHTML = '';
                 optionsDiv.style.display = 'none';
-                addOptionBtn.classList.add('hidden');
+                if (addOptionBtn) addOptionBtn.classList.add('hidden');
                 return;
             }
 
             // Reset to one option for select, radio, or checkbox
-            if (optionGroups.length > 1) {
-                optionsDiv.innerHTML = `
-                <label class="block text-sm font-medium mb-2">Options (one per line)</label>
-                <div class="option-group flex items-center gap-2">
-                    <input type="text" name="form_fields[${select.name.split('[')[1].split(']')[0]}][options][]" placeholder="Option" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                <button type="button" class="add-option text-blue-600 hover:underline text-sm hidden">Add Option</button>
-                `;
-            }
+            optionsDiv.innerHTML = `
+            <label class="block text-sm font-medium mb-2">Options</label>
+            <div class="option-group flex items-center gap-2">
+                <input type="text" name="form_fields[${select.name.split('[')[1].split(']')[0]}][options][]" placeholder="Option" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <button type="button" class="add-option text-blue-600 hover:underline text-sm">Add Option</button>
+        `;
 
             optionsDiv.style.display = 'block';
-            addOptionBtn.classList.remove('hidden');
+            if (addOptionBtn) addOptionBtn.classList.remove('hidden');
         }
 
-        $(document).on('click', '.add-option', function() {
+        $(document).on('click', '#formFields .add-option', function() {
             const fieldGroup = $(this).closest('.form-field');
             const index = fieldGroup.data('field-id');
             const optionsDiv = fieldGroup.find('.field-options');
             const optionCount = optionsDiv.find('.option-group').length;
 
             const optionHtml = `
-                <div class="option-group flex items-center gap-2 mt-2">
-                    <input type="text" name="form_fields[${index}][options][]" placeholder="Option" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
-                    ${optionCount >= 1 ? '<button type="button" class="delete-option text-red-600 hover:underline text-sm">Delete</button>' : ''}
-                </div>
-                `;
+            <div class="option-group flex items-center gap-2 mt-2">
+                <input type="text" name="form_fields[${index}][options][]" placeholder="Option" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
+                ${optionCount >= 1 ? '<button type="button" class="delete-option text-red-600 hover:underline text-sm">Delete</button>' : ''}
+            </div>
+        `;
             $(this).before(optionHtml);
 
             if (optionCount === 0) {

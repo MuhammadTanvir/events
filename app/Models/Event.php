@@ -27,17 +27,6 @@ class Event extends Model
         'is_active' => 'boolean'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function ($event) {
-            if (empty($event->slug)) {
-                $event->slug = Str::slug($event->title) . '-' . Str::random(6);
-            }
-        });
-    }
-
     public function fields()
     {
         return $this->hasMany(FormFieldType::class);
@@ -51,6 +40,22 @@ class Event extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($event) {
+            if (empty($event->slug)) {
+                $event->slug = Str::slug($event->title) . '-' . Str::random(6);
+            }
+        });
     }
 
     public function getRegistrationCountAttribute()
@@ -68,5 +73,10 @@ class Event extends Model
     public function getPublicUrlAttribute()
     {
         return route('events.register', $this->slug);
+    }
+
+    public function isFull()
+    {
+        return $this->max_participants && $this->registrations()->count() >= $this->max_participants;
     }
 }
