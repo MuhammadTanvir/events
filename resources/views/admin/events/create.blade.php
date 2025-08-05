@@ -1,4 +1,10 @@
 <x-layouts.app>
+    <style>
+        .custom-button-margin {
+            margin-top: 3rem;
+            /* Adjust as needed */
+        }
+    </style>
     <!-- Breadcrumbs -->
     <div class="mb-6 flex items-center text-sm">
         <a href="{{ route('dashboard') }}"
@@ -71,7 +77,7 @@
                     <h2 class="text-xl font-semibold mb-4">Registration Form Fields</h2>
 
                     <div id="formFields">
-                        <div class="border rounded-lg p-4 mb-2 form-field" data-field-id="0">
+                        <div class="border rounded-lg p-4 mb-4 form-field" data-field-id="0">
                             <div class="flex justify-between items-center">
                             </div>
 
@@ -105,7 +111,7 @@
                             </div>
 
                             <div class="field-options mt-4" style="display: none;">
-                                <label class="block text-sm font-medium mb-2">Options (one per line)</label>
+                                <label class="block text-sm font-medium mb-2">Options</label>
                                 <div class="option-group flex items-center gap-2">
                                     <input type="text" name="form_fields[0][options][]" placeholder="Option"
                                         class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
@@ -119,14 +125,18 @@
                     </div>
 
                     <button type="button" id="addField"
-                        class="bg-black-500 text-blue px-4 py-2 rounded-lg hover:bg-blue-600">Add Field</button>
+                        class="text-white font-medium bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors flex items-center justify-center cursor-pointer">Add
+                        Field</button>
                 </div>
 
-                <div class="mt-8 flex justify-end space-x-4">
+
+
+                <div class="custom-button-margin flex justify-end space-x-4">
                     <a href="{{ route('events.index') }}"
-                        class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">Cancel</a>
+                        class="bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors flex items-center justify-center cursor-pointer">Cancel</a>
                     <button type="submit"
-                        class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">Create Event</button>
+                        class="text-white font-medium bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors flex items-center justify-center cursor-pointer">Create
+                        Event</button>
                 </div>
             </form>
         </div>
@@ -142,7 +152,7 @@
         function addFormField(fieldData = null) {
             const fieldId = fieldCounter++;
             const fieldContainer = document.createElement('div');
-            fieldContainer.className = 'border rounded-lg p-4 mb-2 form-field';
+            fieldContainer.className = 'border rounded-lg p-4 mb-4 form-field';
             fieldContainer.setAttribute('data-field-id', fieldId);
 
             fieldContainer.innerHTML = `
