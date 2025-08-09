@@ -18,20 +18,40 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::with('registrations')
-                      ->orderBy('created_at', 'desc')
-                      ->paginate(10);
-        
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
         return view('admin.events.index', compact('events'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
+    // public function create()
+    // {
+    //     // All enum cases
+    //     $formFieldTypes = FormFields::cases();
+
+    //     // For your JS to know inputType by value
+    //     $formFieldInputTypes = collect($formFieldTypes)
+    //         ->mapWithKeys(fn($field) => [$field->value => $field->inputType()]);
+
+    //     return view('admin.events.create', compact('formFieldTypes', 'formFieldInputTypes'));
+    // }
+
     public function create()
     {
         $formFieldTypes = FormFields::cases();
-        return view('admin.events.create', compact('formFieldTypes'));
+
+        // Build an array like ['phone' => 'tel', 'text' => 'text', ...]
+        $formFieldInputTypes = [];
+        foreach ($formFieldTypes as $field) {
+            $formFieldInputTypes[$field->value] = $field->inputType();
+        }
+
+        return view('admin.events.create', compact('formFieldTypes', 'formFieldInputTypes'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -51,7 +71,22 @@ class EventController extends Controller
             'form_fields.*.options' => 'nullable|array',
         ]);
 
-        DB::transaction(function () use ($request) {
+        // Clean & normalize form fields
+        $cleanedFields = collect($request->form_fields)->map(function ($field) {
+            $typeEnum = FormFields::from($field['type']); // Get enum from string
+
+            // Remove options for non-selectable types
+            if ($typeEnum->inputType() !== 'selectable') {
+                unset($field['options']);
+            }
+
+            // Always use the enum value for the database
+            $field['type'] = $typeEnum->value; // e.g., 'phone' instead of 'tel'
+
+            return $field;
+        });
+
+        DB::transaction(function () use ($request, $cleanedFields) {
             $event = Event::create([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -61,19 +96,18 @@ class EventController extends Controller
                 'created_by' => Auth::id(),
             ]);
 
-            foreach ($request->form_fields as $field) {
+            foreach ($cleanedFields as $field) {
                 FormFieldType::create([
                     'event_id' => $event->id,
-                    'label' => $field['label'],
-                    'type' => $field['type'],
+                    'label'    => $field['label'],
+                    'type'     => $field['type'], // now 'phone' for FormFields::Phone
                     'required' => $field['required'] ?? false,
-                    'options' => $field['options'] ?? null,
+                    'options'  => $field['options'] ?? null,
                 ]);
             }
         });
-        
 
-        return redirect()->route('admin.events.index')
+        return redirect()->route('events.index')
             ->with('success', 'Event created successfully!');
     }
 

@@ -89,7 +89,8 @@
                                         onchange="updateFieldOptions(this)">
                                         @foreach ($formFieldTypes as $type)
                                             <option value="{{ $type->value }}">
-                                                {{ ucfirst(str_replace('_', ' ', $type->name)) }}</option>
+                                                {{ $type->label() }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -163,8 +164,10 @@
                 <div>
                     <label class="block text-sm font-medium mb-1">Field Type</label>
                     <select name="form_fields[${fieldId}][type]" class="w-full border border-gray-300 rounded px-3 py-2 field-type" onchange="updateFieldOptions(this)">
-                        @foreach ($formFieldTypes as $type)
-                            <option value="{{ $type->value }}">{{ ucfirst(str_replace('_', ' ', $type->name)) }}</option>
+                         @foreach ($formFieldTypes as $type)
+                            <option value="{{ $type->value }}">
+                                {{ $type->label() }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -205,12 +208,18 @@
             }
         }
 
+        const formFieldInputTypes = @json($formFieldInputTypes);
+        console.log(formFieldInputTypes);
+
         function updateFieldOptions(select) {
             const fieldContainer = select.closest('.form-field');
             const optionsDiv = fieldContainer.querySelector('.field-options');
             const addOptionBtn = fieldContainer.querySelector('.add-option');
 
-            // Clear existing options if the new type doesn't require them
+            // Get the input type for this field
+            const inputType = formFieldInputTypes[select.value]; // <-- fixed variable name
+
+            // If this is a regular input field, update its type
             if (!['select', 'radio', 'checkbox'].includes(select.value)) {
                 optionsDiv.innerHTML = '';
                 optionsDiv.style.display = 'none';
@@ -220,12 +229,12 @@
 
             // Reset to one option for select, radio, or checkbox
             optionsDiv.innerHTML = `
-            <label class="block text-sm font-medium mb-2">Options</label>
-            <div class="option-group flex items-center gap-2">
-                <input type="text" name="form_fields[${select.name.split('[')[1].split(']')[0]}][options][]" placeholder="Option" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
-            <button type="button" class="add-option text-blue-600 hover:underline text-sm">Add Option</button>
-        `;
+                <label class="block text-sm font-medium mb-2">Options</label>
+                <div class="option-group flex items-center gap-2">
+                    <input type="text" name="form_fields[${select.name.split('[')[1].split(']')[0]}][options][]" placeholder="Option" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <button type="button" class="add-option text-blue-600 hover:underline text-sm">Add Option</button>
+            `;
 
             optionsDiv.style.display = 'block';
             if (addOptionBtn) addOptionBtn.classList.remove('hidden');
