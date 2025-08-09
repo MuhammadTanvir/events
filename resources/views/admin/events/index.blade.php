@@ -21,7 +21,7 @@
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Events') }}</h1>
     </div>
 
-    <div>
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <table id="example" class="display">
             <thead>
                 <tr>
