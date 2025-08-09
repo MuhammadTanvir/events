@@ -28,7 +28,6 @@
     </div>
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
-            <h1 class="text-3xl font-bold mb-8">Create New Event</h1>
 
             <form action="{{ route('events.store') }}" method="POST" id="eventForm">
                 @csrf
@@ -38,23 +37,36 @@
                     <h2 class="text-xl font-semibold mb-4">Event Details</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Title(*)</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Title *</label>
                             <input type="text" name="title"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 required>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Date(*)</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Event Date *</label>
                             <input type="datetime-local" name="event_date"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 required>
                         </div>
 
+                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Organized by *</label>
+                            <input type="text" name="organized_by"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                required>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Location(*)</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location *</label>
                             <input type="text" name="location"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                            <textarea name="description" rows="3"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
                         </div>
 
                         <div>
@@ -63,13 +75,14 @@
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 min="1">
                         </div>
+
                     </div>
 
-                    <div class="mt-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Description(*)</label>
+                    {{-- <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label>
                         <textarea name="description" rows="3"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-                    </div>
+                    </div> --}}
                 </div>
 
                 {{-- Dynamic Form Builder --}}

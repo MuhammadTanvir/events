@@ -27,23 +27,10 @@ class EventController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    // public function create()
-    // {
-    //     // All enum cases
-    //     $formFieldTypes = FormFields::cases();
-
-    //     // For your JS to know inputType by value
-    //     $formFieldInputTypes = collect($formFieldTypes)
-    //         ->mapWithKeys(fn($field) => [$field->value => $field->inputType()]);
-
-    //     return view('admin.events.create', compact('formFieldTypes', 'formFieldInputTypes'));
-    // }
-
     public function create()
     {
         $formFieldTypes = FormFields::cases();
 
-        // Build an array like ['phone' => 'tel', 'text' => 'text', ...]
         $formFieldInputTypes = [];
         foreach ($formFieldTypes as $field) {
             $formFieldInputTypes[$field->value] = $field->inputType();
@@ -62,6 +49,7 @@ class EventController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'event_date' => 'required|date|after:now',
+            'organized_by' => 'required|string|max:255',
             'location' => 'nullable|string|max:255',
             'max_participants' => 'nullable|integer|min:1',
             'form_fields' => 'required|array|min:1',
@@ -81,7 +69,7 @@ class EventController extends Controller
             }
 
             // Always use the enum value for the database
-            $field['type'] = $typeEnum->value; // e.g., 'phone' instead of 'tel'
+            $field['type'] = $typeEnum->value;
 
             return $field;
         });
@@ -93,7 +81,7 @@ class EventController extends Controller
                 'event_date' => $request->event_date,
                 'location' => $request->location,
                 'max_participants' => $request->max_participants,
-                'created_by' => Auth::id(),
+                'organized_by' => $request->organized_by,
             ]);
 
             foreach ($cleanedFields as $field) {
@@ -122,24 +110,82 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Event $event)
     {
-        //
+        $formFieldTypes = FormFields::cases();
+
+        $formFieldInputTypes = [];
+        foreach ($formFieldTypes as $field) {
+            $formFieldInputTypes[$field->value] = $field->inputType();
+        }
+
+        $event->load('fields');
+        return view('admin.events.edit', compact('event', 'formFieldTypes', 'formFieldInputTypes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Event $event)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'event_date' => 'required|date|after:now',
+            'organized_by' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'max_participants' => 'nullable|integer|min:1',
+            'form_fields' => 'required|array|min:1',
+            'form_fields.*.label' => 'required|string|max:255',
+            'form_fields.*.type' => 'required|in:' . implode(',', array_column(FormFields::cases(), 'value')),
+            'form_fields.*.required' => 'boolean',
+            'form_fields.*.options' => 'nullable|array',
+        ]);
+
+        $cleanedFields = collect($request->form_fields)->map(function ($field) {
+            $typeEnum = FormFields::from($field['type']);
+            if ($typeEnum->inputType() !== 'selectable') {
+                unset($field['options']);
+            }
+            $field['type'] = $typeEnum->value;
+            return $field;
+        });
+
+        DB::transaction(function () use ($event, $request, $cleanedFields) {
+            $event->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'event_date' => $request->event_date,
+                'location' => $request->location,
+                'max_participants' => $request->max_participants,
+                'organized_by' => $request->organized_by,
+            ]);
+
+            // Delete old fields and re-insert
+            $event->fields()->delete();
+
+            foreach ($cleanedFields as $field) {
+                $event->fields()->create([
+                    'label'    => $field['label'],
+                    'type'     => $field['type'],
+                    'required' => $field['required'] ?? false,
+                    'options'  => $field['options'] ?? null,
+                ]);
+            }
+        });
+
+        return redirect()->route('events.index')->with('success', 'Event updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Event $event)
     {
-        //
+        $event->delete();
+
+        return redirect()
+            ->route('events.index')
+            ->with('success', 'Event deleted successfully.');
     }
 }

@@ -19,7 +19,7 @@ class Event extends Model
         'slug',
         'is_active',
         'max_participants',
-        'created_by'
+        'organized_by'
     ];
 
     protected $casts = [
@@ -36,12 +36,6 @@ class Event extends Model
     {
         return $this->hasMany(EventRegistration::class);
     }
-
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
     public function getRouteKeyName()
     {
         return 'slug';
