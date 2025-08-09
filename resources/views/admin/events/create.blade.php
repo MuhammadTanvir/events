@@ -157,6 +157,7 @@
                         @foreach ($oldFields as $index => $field)
                             <div class="border rounded-lg p-4 mb-4 form-field" data-field-id="{{ $index }}">
                                 <div class="flex justify-between items-center">
+                                    <div></div> <!-- empty spacer -->
                                     @if ($index > 0)
                                         <button type="button" class="text-red-500 hover:text-red-700"
                                             onclick="removeField(this)">Remove</button>

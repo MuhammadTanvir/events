@@ -28,6 +28,16 @@
     </div>
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-4xl mx-auto">
+            {{-- Error Summary --}}
+            @if ($errors->any())
+                <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <ul class="list-disc pl-5 text-sm text-red-600">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <form action="{{ route('events.update', $event) }}" method="POST" id="eventForm">
                 @csrf
@@ -39,45 +49,64 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Event Title *</label>
-                            <input type="text" name="title" value="{{ $event->title }}"
+                            <input type="text" name="title" value="{{ old('title', $event->title) }}"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 required>
+                            @error('title')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Event Date *</label>
                             <input type="datetime-local" name="event_date"
-                                value="{{ $event->event_date->format('Y-m-d\TH:i') }}"
+                                value="{{ old('event_date', $event->event_date->format('Y-m-d\TH:i')) }}"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 required>
+                            @error('event_date')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Organized by *</label>
-                            <input type="text" name="organized_by" value="{{ $event->organized_by }}"
+                            <input type="text" name="organized_by"
+                                value="{{ old('organized_by', $event->organized_by) }}"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 required>
+                            @error('organized_by')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Location *</label>
-                            <input type="text" name="location" value="{{ $event->location }}"
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <input type="text" name="location" value="{{ old('location', $event->location) }}"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            @error('location')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                             <textarea name="description" rows="3"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">{{ $event->description }}</textarea>
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">{{ old('description', $event->description) }}</textarea>
+                            @error('description')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Max Participants</label>
-                            <input type="number" name="max_participants" value="{{ $event->max_participants }}"
+                            <input type="number" name="max_participants"
+                                value="{{ old('max_participants', $event->max_participants) }}"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 min="1">
+                            @error('max_participants')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
-
                     </div>
                 </div>
 
@@ -108,36 +137,45 @@
                                             onchange="updateFieldOptions(this)">
                                             @foreach ($formFieldTypes as $type)
                                                 <option value="{{ $type->value }}"
-                                                    {{ $formField->type === $type->value ? 'selected' : '' }}>
+                                                    {{ old("form_fields.$fieldId.type", $formField->type) === $type->value ? 'selected' : '' }}>
                                                     {{ $type->label() }}
                                                 </option>
                                             @endforeach
                                         </select>
+                                        @error("form_fields.$fieldId.type")
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
                                     </div>
 
                                     <div>
                                         <label class="block text-sm font-medium mb-1">Field Label</label>
                                         <input type="text" name="form_fields[{{ $fieldId }}][label]"
-                                            value="{{ $formField->label }}"
+                                            value="{{ old("form_fields.$fieldId.label", $formField->label) }}"
                                             class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
                                             required>
+                                        @error("form_fields.$fieldId.label")
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
                                     </div>
 
                                     <div class="flex items-center">
                                         <label class="flex items-center">
                                             <input type="checkbox" name="form_fields[{{ $fieldId }}][required]"
                                                 value="1" class="mr-2"
-                                                {{ $formField->required ? 'checked' : '' }}>
+                                                {{ old("form_fields.$fieldId.required", $formField->required) ? 'checked' : '' }}>
                                             Required Field
                                         </label>
                                     </div>
                                 </div>
 
                                 <div class="field-options mt-4"
-                                    style="display: {{ in_array($formField->type, ['select', 'radio', 'checkbox']) ? 'block' : 'none' }};">
+                                    style="display: {{ in_array(old("form_fields.$fieldId.type", $formField->type), ['select', 'radio', 'checkbox']) ? 'block' : 'none' }};">
                                     <label class="block text-sm font-medium mb-2">Options</label>
-                                    @if ($formField->options && is_array($formField->options))
-                                        @foreach ($formField->options as $k => $option)
+                                    @php
+                                        $options = old("form_fields.$fieldId.options", $formField->options);
+                                    @endphp
+                                    @if ($options && is_array($options))
+                                        @foreach ($options as $k => $option)
                                             <div
                                                 class="option-group flex items-center gap-2 {{ $k > 0 ? 'mt-2' : '' }}">
                                                 <input type="text"
@@ -157,6 +195,9 @@
                                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
                                         </div>
                                     @endif
+                                    @error("form_fields.$fieldId.options.*")
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                     <button type="button"
                                         class="add-option text-blue-600 hover:underline text-sm">Add Option</button>
                                 </div>
@@ -184,7 +225,7 @@
     </div>
 
     <script>
-        let fieldCounter = {{ $fieldCounter ?? 0 }};
+        let fieldCounter = {{ $fieldCounter ?? (count($event->fields) ?? 0) }};
 
         document.getElementById('addField').addEventListener('click', function() {
             addFormField();
@@ -251,7 +292,6 @@
         }
 
         const formFieldInputTypes = @json($formFieldInputTypes);
-        console.log(formFieldInputTypes);
 
         function updateFieldOptions(select) {
             const fieldContainer = select.closest('.form-field');

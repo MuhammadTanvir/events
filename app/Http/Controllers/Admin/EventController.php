@@ -9,6 +9,7 @@ use App\Models\FormFieldType;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreEventRequest;
 
 class EventController extends Controller
 {
@@ -43,22 +44,8 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'event_date' => 'required|date_format:Y-m-d H:i|after:now',
-            'organized_by' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'max_participants' => 'nullable|integer|min:1',
-            'form_fields' => 'required|array|min:1',
-            'form_fields.*.label' => 'required|string|max:255',
-            'form_fields.*.type' => 'required|in:' . implode(',', array_column(FormFields::cases(), 'value')),
-            'form_fields.*.required' => 'boolean',
-            'form_fields.*.options' => 'nullable|array',
-        ]);
-
         // Clean & normalize form fields
         $cleanedFields = collect($request->form_fields)->map(function ($field) {
             $typeEnum = FormFields::from($field['type']); // Get enum from string
@@ -126,22 +113,8 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event)
+    public function update(StoreEventRequest $request, Event $event)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'event_date' => 'required|date|after:now',
-            'organized_by' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
-            'max_participants' => 'nullable|integer|min:1',
-            'form_fields' => 'required|array|min:1',
-            'form_fields.*.label' => 'required|string|max:255',
-            'form_fields.*.type' => 'required|in:' . implode(',', array_column(FormFields::cases(), 'value')),
-            'form_fields.*.required' => 'boolean',
-            'form_fields.*.options' => 'nullable|array',
-        ]);
-
         $cleanedFields = collect($request->form_fields)->map(function ($field) {
             $typeEnum = FormFields::from($field['type']);
             if ($typeEnum->inputType() !== 'selectable') {
