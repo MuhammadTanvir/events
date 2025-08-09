@@ -42,14 +42,16 @@
                         <td>{{ $event->location }}</td>
                         <td> {{ $event->registrations->count() }}</td>
                         <td>
-                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-sm btn-primary">View</a>
+                            <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-primary">View</a>
+
                             <button type="button" class="btn btn-outline-danger btn-sm"
                                 onclick="copyToClipboard('{{ $event->public_url }}')">
                                 Copy Link
                             </button>
-                            <a href="{{ route('events.edit', $event->id) }}" class="btn btn-sm btn-secondary">Edit</a>
-                            <form action="{{ route('events.destroy', $event->id) }}" method="POST"
-                                class="inline-block">
+
+                            <a href="{{ route('events.edit', $event) }}" class="btn btn-sm btn-secondary">Edit</a>
+
+                            <form action="{{ route('events.destroy', $event) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
