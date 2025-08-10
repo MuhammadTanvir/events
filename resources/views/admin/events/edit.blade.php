@@ -1,10 +1,4 @@
 <x-layouts.app>
-    <style>
-        .custom-button-margin {
-            margin-top: 3rem;
-            /* Adjust as needed */
-        }
-    </style>
     <!-- Breadcrumbs -->
     <div class="mb-6 flex items-center text-sm">
         <a href="{{ route('dashboard') }}"
@@ -79,7 +73,18 @@
                             @enderror
                         </div>
 
-                        <div>
+                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Max Participants</label>
+                            <input type="number" name="max_participants"
+                                value="{{ old('max_participants', $event->max_participants) }}"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                min="1">
+                            @error('max_participants')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
                             <input type="text" name="location" value="{{ old('location', $event->location) }}"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">
@@ -88,22 +93,11 @@
                             @enderror
                         </div>
 
-                        <div>
+                        <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                             <textarea name="description" rows="3"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500">{{ old('description', $event->description) }}</textarea>
                             @error('description')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Max Participants</label>
-                            <input type="number" name="max_participants"
-                                value="{{ old('max_participants', $event->max_participants) }}"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                min="1">
-                            @error('max_participants')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
@@ -213,7 +207,7 @@
                         Field</button>
                 </div>
 
-                <div class="custom-button-margin flex justify-end space-x-4">
+                <div class="flex justify-end space-x-4">
                     <a href="{{ route('events.index') }}"
                         class="bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors flex items-center justify-center cursor-pointer">Cancel</a>
                     <button type="submit"

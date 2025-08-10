@@ -1,10 +1,4 @@
 <x-layouts.app>
-    <style>
-        .custom-button-margin {
-            margin-top: 3rem;
-            /* Adjust as needed */
-        }
-    </style>
     <!-- Breadcrumbs -->
     <div class="mb-6 flex items-center text-sm">
         <a href="{{ route('dashboard') }}"
@@ -95,9 +89,25 @@
                             @enderror
                         </div>
 
-                        {{-- Location --}}
+                        {{-- Max Participants --}}
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Max Participants</label>
+                            <input type="number" name="max_participants" value="{{ old('max_participants') }}"
+                                min="1"
+                                class="w-full 
+                                border rounded-lg 
+                                px-3 py-2 
+                                focus:ring-indigo-500 
+                                focus:border-indigo-500 
+                                @error('max_participants') border-red-500 @enderror">
+                            @error('max_participants')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        {{-- Location --}}
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location *</label>
                             <input type="text" name="location" value="{{ old('location') }}"
                                 class="w-full 
                                 border rounded-lg 
@@ -114,27 +124,13 @@
                         {{-- Description --}}
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                            <textarea name="description" rows="3" class="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 @error('description') border-red-500 @enderror"></textarea>
+                            <textarea name="description" rows="3"
+                                class="w-full border rounded-lg px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 @error('description') border-red-500 @enderror"></textarea>
                             @error('description')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        {{-- Max Participants --}}
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Max Participants</label>
-                            <input type="number" name="max_participants" value="{{ old('max_participants') }}"
-                                min="1"
-                                class="w-full 
-                                border rounded-lg 
-                                px-3 py-2 
-                                focus:ring-indigo-500 
-                                focus:border-indigo-500 
-                                @error('max_participants') border-red-500 @enderror">
-                            @error('max_participants')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
                     </div>
                 </div>
 
@@ -247,7 +243,7 @@
                 </div>
 
                 {{-- Buttons --}}
-                <div class="custom-button-margin flex justify-end space-x-4 mt-6">
+                <div class="flex justify-end space-x-4 mt-6">
                     <a href="{{ route('events.index') }}"
                         class="bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors flex items-center justify-center cursor-pointer">Cancel</a>
                     <button type="submit"

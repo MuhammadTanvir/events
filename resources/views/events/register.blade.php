@@ -35,6 +35,9 @@
                         <div class="mt-2 bg-gray-50 rounded-lg p-4 border border-gray-200">
                             <h4 class="text-lg font-semibold text-gray-900 mb-3">Event Title</h4>
                             <p class="text-gray-700 leading-relaxed">{{ $event->title }}</p>
+                            <p class="text-sm text-gray-500 mt-2">Hosted by
+                                <span class="text-blue-600">{{ $event->organized_by }}</span>
+                            </p>
                         </div>
                         <!-- Event Details Card -->
                         <div class="mt-6">
@@ -114,7 +117,7 @@
                             </div>
                         </div>
                         <!-- Registration Form Card -->
-                        <div class="p-8 mt-6 border-gray-100">
+                        <div class="mt-6 border-gray-100">
 
                             <form method="POST" action="{{ route('events.register.store', $event->slug) }}">
                                 @csrf
