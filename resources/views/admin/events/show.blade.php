@@ -20,6 +20,14 @@
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Show Event') }}</h1>
     </div>
+
+    <div class="mb-6">
+        <a href="{{ route('events.registrations.index', $event) }}"
+            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            {{ __('Show registered users') }}
+        </a>
+    </div>
+
     <div class="min-h-screen py-8">
         <div class="container mx-auto px-4">
             <div class="flex justify-center">
@@ -112,26 +120,26 @@
                             </div>
                         </div>
                         <!-- Registration Form Card -->
-                       <div class="mt-6 bg-gray-50 rounded-lg p-6 border border-gray-200">
-    <h4 class="text-lg font-semibold text-gray-900 mb-6">Event Form Fields</h4>
+                        <div class="mt-6 bg-gray-50 rounded-lg p-6 border border-gray-200">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-6">Event Form Fields</h4>
 
-    @if ($formFields->count())
-        <div class="space-y-4">
-            @foreach ($formFields as $field)
-                <div class="flex items-center">
-                    <span class="text-sm font-medium text-gray-700">
-                        {{ $field->label }}
-                        @if ($field->required)
-                            <span class="text-red-500">*</span>
-                        @endif
-                    </span>
-                </div>
-            @endforeach
-        </div>
-    @else
-        <p class="text-sm text-gray-500">No form fields available for this event.</p>
-    @endif
-</div>
+                            @if ($formFields->count())
+                                <div class="space-y-4">
+                                    @foreach ($formFields as $field)
+                                        <div class="flex items-center">
+                                            <span class="text-sm font-medium text-gray-700">
+                                                {{ $field->label }}
+                                                @if ($field->required)
+                                                    <span class="text-red-500">*</span>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p class="text-sm text-gray-500">No form fields available for this event.</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

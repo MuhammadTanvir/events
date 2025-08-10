@@ -26,6 +26,10 @@
             Registration Form
         </h4>
     </div>
+
+     <!-- Flash Message -->
+    <x-flash-message />
+    
     <div class="min-h-screen py-8">
         <div class="container mx-auto px-4">
             <div class="flex justify-center">
