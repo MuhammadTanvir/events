@@ -21,6 +21,21 @@
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ __('Events') }}</h1>
     </div>
 
+    <!-- Flash Message -->
+    <x-flash-message />
+
+    <!-- Create Event Button -->
+    <div class="mb-6">
+        <a href="{{ route('events.create') }}"
+            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 4v16m8-8H4" />
+            </svg> --}}
+            {{ __('Create Event') }}
+        </a>
+    </div>
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <table id="example" class="display">
             <thead>
@@ -62,7 +77,6 @@
                     <div class="col-12">
                         <div class="text-center py-5">
                             <p class="text-muted">No events created yet.</p>
-                            <a href="{{ route('events.create') }}" class="btn btn-primary">Create Your First Event</a>
                         </div>
                     </div>
                 @endforelse
