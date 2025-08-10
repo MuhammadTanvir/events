@@ -9,22 +9,28 @@ use App\Models\EventRegistration;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Notifications\EventConfirmation;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\EventReminderNotification;
 use App\Notifications\EventRegistrationConfirmation;
 
 class EventRegistrationController extends Controller
 {
+    public function index(Event $event)
+    {
+        $registrations = $event->registrations()->latest()->get();
+        return view('admin.registrations.index', compact('event', 'registrations'));
+    }
+
     public function show(Event $event)
     {
-        return view('events.success');
-
-        // if (!$event->is_active) {
-        //     abort(404, 'Event not found or inactive');
-        // }
-        // if ($event->isFull()) {
-        //     return view('events.full', compact('event'));
-        // }
-        // $formFields = $event->fields()->orderBy('created_at')->get();
-        // return view('events.register', compact('event', 'formFields'));
+        if (!$event->is_active) {
+            abort(404, 'Event not found or inactive');
+        }
+        if ($event->isFull()) {
+            return view('events.full', compact('event'));
+        }
+        $formFields = $event->fields()->orderBy('created_at')->get();
+        return view('events.register', compact('event', 'formFields'));
     }
 
     public function store(Request $request, $slug)
@@ -126,5 +132,23 @@ class EventRegistrationController extends Controller
         $registration->update(['confirmation_sent' => true]);
 
         return view('events.success', compact('event'));
+    }
+
+    public function sendReminder(Request $request, Event $event)
+    {
+        $request->validate([
+            'selected' => 'required|array|min:1',
+        ]);
+
+        $registrations = EventRegistration::whereIn('id', $request->selected)->get();
+
+        foreach ($registrations as $registration) {
+            Notification::route('mail', $registration->email)
+                ->notify(new EventReminderNotification($event));
+            
+            $registration->update(['reminder_sent' => true]);
+        }
+
+        return back()->with('success', 'Reminder email(s) sent successfully.');
     }
 }

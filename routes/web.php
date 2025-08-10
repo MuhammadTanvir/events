@@ -21,6 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/events/{event:slug}/register', [EventRegistrationController::class, 'store'])
         ->name('events.register.store');
 
+    Route::get('{event}/registrations', [EventRegistrationController::class, 'index'])->name('events.registrations.index');
+    Route::post('{event}/registrations/send-reminder', [EventRegistrationController::class, 'sendReminder'])->name('events.registrations.reminder');
+
     Route::get('settings/profile', [Settings\ProfileController::class, 'edit'])->name('settings.profile.edit');
     Route::put('settings/profile', [Settings\ProfileController::class, 'update'])->name('settings.profile.update');
     Route::delete('settings/profile', [Settings\ProfileController::class, 'destroy'])->name('settings.profile.destroy');
