@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EventRegistration extends Model
 {
     /** @use HasFactory<\Database\Factories\EventRegistrationFactory> */
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'event_id',
@@ -34,5 +35,10 @@ class EventRegistration extends Model
     public function getFormValue($fieldName, $default = null)
     {
         return $this->responses[$fieldName] ?? $default;
+    }
+
+    public function routeNotificationForMail($notification)
+    {
+        return $this->email; // send email to registration email
     }
 }

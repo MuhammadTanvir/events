@@ -5,13 +5,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\EventRegistrationController;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::get('/', function () {
+        $totalEvents = \App\Models\Event::count();
+        $totalUsers = \App\Models\User::count();
+        return view('dashboard', compact('totalEvents', 'totalUsers'));
+    })->name('dashboard');
+
     Route::resource('events', EventController::class);
 
     Route::get('/events/{event:slug}/register', [EventRegistrationController::class, 'show'])
