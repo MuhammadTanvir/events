@@ -13,14 +13,14 @@
                                 :active="request()->routeIs('events*')">Events</x-layouts.sidebar-link>
 
                             <!-- Example two level -->
-                            <x-layouts.sidebar-two-level-link-parent title="Example two level" icon="fas-house"
+                            {{-- <x-layouts.sidebar-two-level-link-parent title="Example two level" icon="fas-house"
                                 :active="request()->routeIs('two-level*')">
                                 <x-layouts.sidebar-two-level-link href="#" icon='fas-house'
                                     :active="request()->routeIs('two-level*')">Child</x-layouts.sidebar-two-level-link>
-                            </x-layouts.sidebar-two-level-link-parent>
+                            </x-layouts.sidebar-two-level-link-parent> --}}
 
                             <!-- Example three level -->
-                            <x-layouts.sidebar-two-level-link-parent title="Example three level" icon="fas-house"
+                            {{-- <x-layouts.sidebar-two-level-link-parent title="Example three level" icon="fas-house"
                                 :active="request()->routeIs('three-level*')">
                                 <x-layouts.sidebar-two-level-link href="#" icon='fas-house'
                                     :active="request()->routeIs('three-level*')">Single Link</x-layouts.sidebar-two-level-link>
@@ -31,7 +31,7 @@
                                         Third Level Link
                                     </x-layouts.sidebar-three-level-link>
                                 </x-layouts.sidebar-three-level-parent>
-                            </x-layouts.sidebar-two-level-link-parent>
+                            </x-layouts.sidebar-two-level-link-parent> --}}
                         </ul>
                     </nav>
                 </div>
