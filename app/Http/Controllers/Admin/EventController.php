@@ -82,16 +82,18 @@ class EventController extends Controller
             }
         });
 
-        return redirect()->route('events.index')
+        return redirect()->route('admin.events.index')
             ->with('success', 'Event created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Event $event)
     {
-        //
+        // Fetch the dynamic form fields for this event
+        $formFields = $event->fields()->get();
+        return view('admin.events.show', compact('event', 'formFields'));
     }
 
     /**

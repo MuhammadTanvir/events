@@ -56,20 +56,59 @@
                         <td> {{ $event->is_active ? 'Active' : 'Inactive' }}</td>
                         <td>{{ $event->location }}</td>
                         <td> {{ $event->registrations->count() }}</td>
-                        <td>
-                            <a href="{{ route('events.show', $event) }}" class="btn btn-sm btn-primary">View</a>
+                        <td class="flex flex-wrap gap-2">
 
-                            <button type="button" class="btn btn-outline-danger btn-sm"
-                                onclick="copyToClipboard('{{ $event->public_url }}')">
-                                Copy Link
+                            {{-- View Button --}}
+                            <a href="{{ route('events.show', $event) }}"
+                                class="inline-flex items-center px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943
+                     9.542 7-1.274 4.057-5.065 7-9.542 7
+                     -4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </a>
+
+                            {{-- Copy Link Button --}}
+                            <button type="button" onclick="copyToClipboard('{{ $event->public_url }}')"
+                                class="inline-flex items-center px-2 py-1 border border-red-400 text-red-500 rounded-md hover:bg-red-50 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 015.656 0l.707.707a4 4 0 010 5.656
+                     l-3.536 3.536a4 4 0 01-5.656 0l-.707-.707" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.172 13.828a4 4 0 01-5.656 0l-.707-.707
+                     a4 4 0 010-5.656l3.536-3.536a4 4 0 015.656 0l.707.707" />
+                                </svg>
                             </button>
 
-                            <a href="{{ route('events.edit', $event) }}" class="btn btn-sm btn-secondary">Edit</a>
+                            {{-- Edit Button --}}
+                            <a href="{{ route('events.edit', $event) }}"
+                                class="inline-flex items-center px-2 py-1 bg-gray-600 text-red rounded-md hover:bg-gray-700 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5
+                     M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                </svg>
+                            </a>
 
-                            <form action="{{ route('events.destroy', $event) }}" method="POST" class="inline-block">
+                            {{-- Delete Button --}}
+                            <form action="{{ route('events.destroy', $event) }}" method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this event?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                <button type="submit"
+                                    class="inline-flex items-center px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862
+                         a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6
+                         M1 7h22M8 7V5a2 2 0 012-2h4
+                         a2 2 0 012 2v2" />
+                                    </svg>
+
+                                </button>
                             </form>
                         </td>
                     </tr>
