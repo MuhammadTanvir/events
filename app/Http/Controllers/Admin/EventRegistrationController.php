@@ -8,19 +8,23 @@ use Illuminate\Http\Request;
 use App\Models\EventRegistration;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Notifications\EventConfirmation;
+use App\Notifications\EventRegistrationConfirmation;
 
 class EventRegistrationController extends Controller
 {
     public function show(Event $event)
     {
-        if (!$event->is_active) {
-            abort(404, 'Event not found or inactive');
-        }
-        if ($event->isFull()) {
-            return view('events.full', compact('event'));
-        }
-        $formFields = $event->fields()->orderBy('created_at')->get();
-        return view('events.register', compact('event', 'formFields'));
+        return view('events.success');
+
+        // if (!$event->is_active) {
+        //     abort(404, 'Event not found or inactive');
+        // }
+        // if ($event->isFull()) {
+        //     return view('events.full', compact('event'));
+        // }
+        // $formFields = $event->fields()->orderBy('created_at')->get();
+        // return view('events.register', compact('event', 'formFields'));
     }
 
     public function store(Request $request, $slug)
@@ -115,6 +119,11 @@ class EventRegistrationController extends Controller
             'responses' => $responses,
             'registered_at' => now()
         ]);
+
+        // Send confirmation email
+        $registration->notify(new EventRegistrationConfirmation($event, $registration));
+
+        $registration->update(['confirmation_sent' => true]);
 
         return view('events.success', compact('event'));
     }
