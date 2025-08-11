@@ -16,11 +16,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('events', EventController::class);
 
-    Route::get('/events/{event:slug}/register', [EventRegistrationController::class, 'show'])
-        ->name('events.register');
-    Route::post('/events/{event:slug}/register', [EventRegistrationController::class, 'store'])
-        ->name('events.register.store');
-
     Route::get('{event}/registrations', [EventRegistrationController::class, 'index'])->name('events.registrations.index');
     Route::post('{event}/registrations/send-reminder', [EventRegistrationController::class, 'sendReminder'])->name('events.registrations.reminder');
 
@@ -33,5 +28,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 });
+
+Route::get('/events/{event:slug}/register', [EventRegistrationController::class, 'show'])
+    ->name('events.register');
+Route::post('/events/{event:slug}/register', [EventRegistrationController::class, 'store'])
+    ->name('events.register.store');
 
 require __DIR__ . '/auth.php';
