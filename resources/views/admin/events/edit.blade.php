@@ -207,7 +207,7 @@
                         Field</button>
                 </div>
 
-                <div class="flex justify-end space-x-4">
+                <div class="flex justify-end space-x-4 mt-6">
                     <a href="{{ route('events.index') }}"
                         class="bg-red-600 hover:bg-red-700 focus:ring-red-500 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors flex items-center justify-center cursor-pointer">Cancel</a>
                     <button type="submit"

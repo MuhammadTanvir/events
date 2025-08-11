@@ -105,7 +105,6 @@
                         </div>
                         <!-- Registration Form Card -->
                         <div class="mt-4 border-gray-100">
-
                             @if ($errors->any())
                                 <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
                                     <div class="flex">
@@ -135,7 +134,7 @@
                             <form method="POST" action="{{ route('events.register.store', $event->slug) }}">
                                 @csrf
 
-                                <div class="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <!-- Email Field Card -->
                                     <div
                                         class="bg-gray-50 rounded-lg p-4 border border-gray-200 {{ $errors->has('email') ? 'border-red-300 bg-red-50' : '' }}">
