@@ -9,15 +9,14 @@
                             <x-layouts.sidebar-link href="{{ route('dashboard') }}" icon='fas-house'
                                 :active="request()->routeIs('dashboard*')">Dashboard</x-layouts.sidebar-link>
 
-                            <x-layouts.sidebar-link href="{{ route('events.index') }}" icon='fas-house'
-                                :active="request()->routeIs('events*')">Events</x-layouts.sidebar-link>
-
                             <!-- Example two level -->
-                            {{-- <x-layouts.sidebar-two-level-link-parent title="Example two level" icon="fas-house"
-                                :active="request()->routeIs('two-level*')">
-                                <x-layouts.sidebar-two-level-link href="#" icon='fas-house'
-                                    :active="request()->routeIs('two-level*')">Child</x-layouts.sidebar-two-level-link>
-                            </x-layouts.sidebar-two-level-link-parent> --}}
+                            <x-layouts.sidebar-two-level-link-parent title="Event" icon="fas-calendar-week"
+                                :active="request()->routeIs('events*')">
+                                <x-layouts.sidebar-two-level-link href="{{ route('events.index') }}" icon='fas-calendar-week'
+                                    :active="request()->routeIs('events.index')">Events List</x-layouts.sidebar-two-level-link>
+                                <x-layouts.sidebar-two-level-link href="{{ route('events.create') }}" icon='fas-calendar-week'
+                                    :active="request()->routeIs('events.create')">Create Event</x-layouts.sidebar-two-level-link>
+                            </x-layouts.sidebar-two-level-link-parent>
 
                             <!-- Example three level -->
                             {{-- <x-layouts.sidebar-two-level-link-parent title="Example three level" icon="fas-house"
