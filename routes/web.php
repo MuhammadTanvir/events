@@ -3,16 +3,13 @@
 use App\Http\Controllers\Settings;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventRegistrationController;
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/', function () {
-        $totalEvents = \App\Models\Event::count();
-        $totalUsers = \App\Models\User::count();
-        return view('dashboard', compact('totalEvents', 'totalUsers'));
-    })->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::resource('events', EventController::class);
 
