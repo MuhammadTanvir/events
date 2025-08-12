@@ -5,13 +5,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventRegistrationController;
+use App\Http\Controllers\Admin\UserController;
 
+Route::middleware(['auth', 'verified', 'isAdmin'])->group(function () {
 
-Route::middleware(['auth', 'verified'])->group(function () {
-
+    Route::get('/', DashboardController::class)->name('home');
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::resource('events', EventController::class);
+
+    Route::resource('users', UserController::class);
 
     Route::get('{event}/registrations', [EventRegistrationController::class, 'index'])->name('events.registrations.index');
     Route::post('{event}/registrations/send-reminder', [EventRegistrationController::class, 'sendReminder'])->name('events.registrations.reminder');
