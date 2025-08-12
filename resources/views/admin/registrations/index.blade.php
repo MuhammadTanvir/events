@@ -51,7 +51,13 @@
                             </td>
                             <td>{{ $reg->email }}</td>
                             <td>{{ $reg->registered_at }}</td>
-                            <td>{{ $reg->reminder_sent ? '✅' : '❌' }}</td>
+                            <td>
+                                @if ($reg->reminder_sent)
+                                    <x-heroicon-o-check class="w-4 h-4 text-green-500" />
+                                @else
+                                    <x-heroicon-o-x-circle class="w-4 h-4 text-red-500" />
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -65,11 +71,20 @@
         });
         new DataTable('#example', {
             "lengthChange": false,
-            "order": [[2, 'asc']],
-            "columnDefs": [{
-                "targets": 0,
-                "orderable": false
-            }]
+            "order": [
+                [2, 'asc']
+            ],
+            "columnDefs": [
+                {
+                    "targets": 0,
+                    "orderable": false,
+                }, 
+                {
+                    "className": "dt-center",
+                    "targets": "_all"
+                }
+
+            ]
         });
     </script>
 </x-layouts.app>

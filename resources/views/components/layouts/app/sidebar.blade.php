@@ -10,11 +10,11 @@
                                 :active="request()->routeIs('dashboard*')">Dashboard</x-layouts.sidebar-link>
 
                             <!-- Example two level -->
-                            <x-layouts.sidebar-two-level-link-parent title="Event" icon="fas-calendar-week"
+                            <x-layouts.sidebar-two-level-link-parent title="Manage Event" icon="fas-calendar-week"
                                 :active="request()->routeIs('events*')">
                                 <x-layouts.sidebar-two-level-link href="{{ route('events.index') }}" icon='fas-calendar-week'
                                     :active="request()->routeIs('events.index')">Events List</x-layouts.sidebar-two-level-link>
-                                <x-layouts.sidebar-two-level-link href="{{ route('events.create') }}" icon='fas-calendar-week'
+                                <x-layouts.sidebar-two-level-link href="{{ route('events.create') }}" icon='fas-pen-to-square'
                                     :active="request()->routeIs('events.create')">Create Event</x-layouts.sidebar-two-level-link>
                             </x-layouts.sidebar-two-level-link-parent>
 
